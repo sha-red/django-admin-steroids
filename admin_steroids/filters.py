@@ -306,7 +306,11 @@ class AjaxFieldFilter(FieldListFilter):
                     models.ManyToManyField,
                     models.OneToOneField,
                 )):
-                rel_model = self.field.rel.to
+                if hasattr(self.field, 'remote_field'):
+                    rel = self.field.remote_field
+                else:
+                    rel = self.field.rel
+                rel_model = rel.to
                 #TODO:handle non-numeric IDs?
                 # AvB edit here; some FK models do not have an (integer) or .id attribute!
                 #value = str(rel_model.objects.get(id=int(value)))
